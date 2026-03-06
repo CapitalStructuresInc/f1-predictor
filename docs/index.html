@@ -619,16 +619,16 @@
         <div class="race-dot" data-race="Bahrain">04</div>
         <div class="race-dot" data-race="Saudi Arabia">05</div>
         <div class="race-dot" data-race="Miami">06</div>
-        <div class="race-dot" data-race="Emilia Romagna">07</div>
+        <div class="race-dot" data-race="Canada">07</div>
         <div class="race-dot" data-race="Monaco">08</div>
-        <div class="race-dot" data-race="Spain">09</div>
-        <div class="race-dot" data-race="Canada">10</div>
-        <div class="race-dot" data-race="Austria">11</div>
-        <div class="race-dot" data-race="Great Britain">12</div>
-        <div class="race-dot" data-race="Belgium">13</div>
-        <div class="race-dot" data-race="Hungary">14</div>
-        <div class="race-dot" data-race="Netherlands">15</div>
-        <div class="race-dot" data-race="Italy">16</div>
+        <div class="race-dot" data-race="Barcelona">09</div>
+        <div class="race-dot" data-race="Austria">10</div>
+        <div class="race-dot" data-race="Great Britain">11</div>
+        <div class="race-dot" data-race="Belgium">12</div>
+        <div class="race-dot" data-race="Hungary">13</div>
+        <div class="race-dot" data-race="Netherlands">14</div>
+        <div class="race-dot" data-race="Italy">15</div>
+        <div class="race-dot" data-race="Madrid">16</div>
         <div class="race-dot" data-race="Azerbaijan">17</div>
         <div class="race-dot" data-race="Singapore">18</div>
         <div class="race-dot" data-race="United States">19</div>
@@ -689,15 +689,16 @@
         </div>
 
         <div class="form-group">
-            <label>Highest-Finishing Rookie</label>
-            <p class="hint">Antonelli, Hadjar, Bearman, Doohan, or Bortoleto?</p>
+            <label>Highest-Finishing Second-Year Driver</label>
+            <p class="hint">Antonelli, Hadjar, Bearman, Bortoleto, Colapinto, or rookie Lindblad?</p>
             <select data-field="highestRookie">
                 <option value="">Select...</option>
                 <option>Andrea Kimi Antonelli</option>
                 <option>Isack Hadjar</option>
                 <option>Oliver Bearman</option>
-                <option>Jack Doohan</option>
                 <option>Gabriel Bortoleto</option>
+                <option>Franco Colapinto</option>
+                <option>Arvid Lindblad</option>
             </select>
         </div>
 
@@ -725,9 +726,9 @@
             <li class="rank-item" draggable="true" data-team="Aston Martin"><span class="rank-num">05</span><span class="rank-name">Aston Martin</span><span class="rank-handle">&#x2630;</span></li>
             <li class="rank-item" draggable="true" data-team="Alpine"><span class="rank-num">06</span><span class="rank-name">Alpine</span><span class="rank-handle">&#x2630;</span></li>
             <li class="rank-item" draggable="true" data-team="Williams"><span class="rank-num">07</span><span class="rank-name">Williams</span><span class="rank-handle">&#x2630;</span></li>
-            <li class="rank-item" draggable="true" data-team="RB"><span class="rank-num">08</span><span class="rank-name">RB</span><span class="rank-handle">&#x2630;</span></li>
+            <li class="rank-item" draggable="true" data-team="Racing Bulls"><span class="rank-num">08</span><span class="rank-name">Racing Bulls</span><span class="rank-handle">&#x2630;</span></li>
             <li class="rank-item" draggable="true" data-team="Haas"><span class="rank-num">09</span><span class="rank-name">Haas</span><span class="rank-handle">&#x2630;</span></li>
-            <li class="rank-item" draggable="true" data-team="Sauber"><span class="rank-num">10</span><span class="rank-name">Sauber</span><span class="rank-handle">&#x2630;</span></li>
+            <li class="rank-item" draggable="true" data-team="Audi"><span class="rank-num">10</span><span class="rank-name">Audi</span><span class="rank-handle">&#x2630;</span></li>
             <li class="rank-item" draggable="true" data-team="Cadillac"><span class="rank-num">11</span><span class="rank-name">Cadillac</span><span class="rank-handle">&#x2630;</span></li>
         </ul>
     </div>
@@ -938,49 +939,50 @@
 <script>
 // ———— Data ————
 const DRIVERS = [
-    'Max Verstappen', 'Liam Lawson',
+    'Max Verstappen', 'Isack Hadjar',
     'Charles Leclerc', 'Lewis Hamilton',
     'George Russell', 'Andrea Kimi Antonelli',
     'Lando Norris', 'Oscar Piastri',
     'Fernando Alonso', 'Lance Stroll',
-    'Pierre Gasly', 'Jack Doohan',
+    'Pierre Gasly', 'Franco Colapinto',
     'Carlos Sainz', 'Alex Albon',
-    'Yuki Tsunoda', 'Isack Hadjar',
+    'Liam Lawson', 'Arvid Lindblad',
     'Nico Hulkenberg', 'Gabriel Bortoleto',
-    'Oliver Bearman', 'Esteban Ocon'
+    'Oliver Bearman', 'Esteban Ocon',
+    'Sergio Perez', 'Valtteri Bottas'
 ];
 
 const CONSTRUCTORS = [
     'Red Bull Racing', 'Ferrari', 'McLaren', 'Mercedes',
-    'Aston Martin', 'Alpine', 'Williams', 'RB',
-    'Haas', 'Sauber', 'Cadillac'
+    'Aston Martin', 'Alpine', 'Williams', 'Racing Bulls',
+    'Haas', 'Audi', 'Cadillac'
 ];
 
 const RACES = [
-    { id: '01', name: 'Australian Grand Prix', city: 'Melbourne' },
-    { id: '02', name: 'Chinese Grand Prix', city: 'Shanghai' },
-    { id: '03', name: 'Japanese Grand Prix', city: 'Suzuka' },
-    { id: '04', name: 'Bahrain Grand Prix', city: 'Sakhir' },
-    { id: '05', name: 'Saudi Arabian Grand Prix', city: 'Jeddah' },
-    { id: '06', name: 'Miami Grand Prix', city: 'Miami' },
-    { id: '07', name: 'Emilia Romagna Grand Prix', city: 'Imola' },
-    { id: '08', name: 'Monaco Grand Prix', city: 'Monte Carlo' },
-    { id: '09', name: 'Spanish Grand Prix', city: 'Barcelona' },
-    { id: '10', name: 'Canadian Grand Prix', city: 'Montreal' },
-    { id: '11', name: 'Austrian Grand Prix', city: 'Spielberg' },
-    { id: '12', name: 'British Grand Prix', city: 'Silverstone' },
-    { id: '13', name: 'Belgian Grand Prix', city: 'Spa' },
-    { id: '14', name: 'Hungarian Grand Prix', city: 'Budapest' },
-    { id: '15', name: 'Dutch Grand Prix', city: 'Zandvoort' },
-    { id: '16', name: 'Italian Grand Prix', city: 'Monza' },
-    { id: '17', name: 'Azerbaijan Grand Prix', city: 'Baku' },
-    { id: '18', name: 'Singapore Grand Prix', city: 'Marina Bay' },
-    { id: '19', name: 'United States Grand Prix', city: 'Austin' },
-    { id: '20', name: 'Mexico City Grand Prix', city: 'Mexico City' },
-    { id: '21', name: 'Brazilian Grand Prix', city: 'Interlagos' },
-    { id: '22', name: 'Las Vegas Grand Prix', city: 'Las Vegas' },
-    { id: '23', name: 'Qatar Grand Prix', city: 'Lusail' },
-    { id: '24', name: 'Abu Dhabi Grand Prix', city: 'Yas Marina' }
+    { id: '01', name: 'Australian Grand Prix', city: 'Melbourne', date: 'Mar 6\u20138' },
+    { id: '02', name: 'Chinese Grand Prix', city: 'Shanghai', date: 'Mar 13\u201315' },
+    { id: '03', name: 'Japanese Grand Prix', city: 'Suzuka', date: 'Mar 27\u201329' },
+    { id: '04', name: 'Bahrain Grand Prix', city: 'Sakhir', date: 'Apr 10\u201312' },
+    { id: '05', name: 'Saudi Arabian Grand Prix', city: 'Jeddah', date: 'Apr 17\u201319' },
+    { id: '06', name: 'Miami Grand Prix', city: 'Miami', date: 'May 1\u20133' },
+    { id: '07', name: 'Canadian Grand Prix', city: 'Montreal', date: 'May 22\u201324' },
+    { id: '08', name: 'Monaco Grand Prix', city: 'Monte Carlo', date: 'Jun 5\u20137' },
+    { id: '09', name: 'Barcelona Grand Prix', city: 'Barcelona', date: 'Jun 12\u201314' },
+    { id: '10', name: 'Austrian Grand Prix', city: 'Spielberg', date: 'Jun 26\u201328' },
+    { id: '11', name: 'British Grand Prix', city: 'Silverstone', date: 'Jul 3\u20135' },
+    { id: '12', name: 'Belgian Grand Prix', city: 'Spa', date: 'Jul 17\u201319' },
+    { id: '13', name: 'Hungarian Grand Prix', city: 'Budapest', date: 'Jul 24\u201326' },
+    { id: '14', name: 'Dutch Grand Prix', city: 'Zandvoort', date: 'Aug 21\u201323' },
+    { id: '15', name: 'Italian Grand Prix', city: 'Monza', date: 'Sep 4\u20136' },
+    { id: '16', name: 'Spanish Grand Prix', city: 'Madrid', date: 'Sep 11\u201313' },
+    { id: '17', name: 'Azerbaijan Grand Prix', city: 'Baku', date: 'Sep 24\u201326' },
+    { id: '18', name: 'Singapore Grand Prix', city: 'Marina Bay', date: 'Oct 9\u201311' },
+    { id: '19', name: 'United States Grand Prix', city: 'Austin', date: 'Oct 23\u201325' },
+    { id: '20', name: 'Mexico City Grand Prix', city: 'Mexico City', date: 'Oct 30\u2013Nov 1' },
+    { id: '21', name: 'Brazilian Grand Prix', city: 'Interlagos', date: 'Nov 6\u20138' },
+    { id: '22', name: 'Las Vegas Grand Prix', city: 'Las Vegas', date: 'Nov 19\u201321' },
+    { id: '23', name: 'Qatar Grand Prix', city: 'Lusail', date: 'Nov 27\u201329' },
+    { id: '24', name: 'Abu Dhabi Grand Prix', city: 'Yas Marina', date: 'Dec 4\u20136' }
 ];
 
 let currentEntrant = 'martin';
@@ -1206,7 +1208,7 @@ function renderComparison() {
     html += '<li class="header"><span class="col-label">Question</span><span class="col-pick">Martin</span><span class="col-pick">Audrey</span></li>';
     html += '<li><span class="col-label">Drivers\' Champion</span>' + pick(mp.driversChamp) + pick(ap.driversChamp) + '</li>';
     html += '<li><span class="col-label">Constructors\' Champion</span>' + pick(mp.constructorsChamp) + pick(ap.constructorsChamp) + '</li>';
-    html += '<li><span class="col-label">Highest Rookie</span>' + pick(mp.highestRookie) + pick(ap.highestRookie) + '</li>';
+    html += '<li><span class="col-label">Highest 2nd-Year</span>' + pick(mp.highestRookie) + pick(ap.highestRookie) + '</li>';
     html += '<li><span class="col-label">Most Wins</span>' + pick(mp.mostWins) + pick(ap.mostWins) + '</li>';
     html += '<li><span class="col-label">Most Poles</span>' + pick(mp.mostPoles) + pick(ap.mostPoles) + '</li>';
     html += '</ul>';
