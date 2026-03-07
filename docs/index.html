@@ -687,15 +687,18 @@
         </div>
 
         <div class="form-group">
-            <label>Rookie &mdash; Lindblad's Final Championship Position</label>
-            <p class="hint">Arvid Lindblad (Racing Bulls) is the only 2026 rookie. Where does he finish in the WDC?</p>
-            <input type="number" data-field="lindbladPos" min="1" max="22" placeholder="e.g. 14">
+            <label>Best Rookie</label>
+            <p class="hint">Lindblad is the only 2026 rookie.</p>
+            <select data-field="bestRookie">
+                <option value="">Select...</option>
+                <option>Arvid Lindblad</option>
+            </select>
         </div>
 
         <div class="form-group">
-            <label>Highest-Finishing Second-Year Driver</label>
+            <label>Best Second-Year Driver</label>
             <p class="hint">Antonelli, Hadjar, Bearman, Bortoleto, or Colapinto?</p>
-            <select data-field="highestSophomore">
+            <select data-field="bestSophomore">
                 <option value="">Select...</option>
                 <option>Andrea Kimi Antonelli</option>
                 <option>Isack Hadjar</option>
@@ -867,7 +870,7 @@
     <p>Correct P1 = 3 pts. Correct P2 = 2 pts. Correct P3 = 1 pt. If you pick a driver who finishes on the podium but in the wrong position, +1 bonus pt.</p>
 
     <h3>Over/Under Scoring</h3>
-    <p>For numerical picks (Lindblad Position, Different Winners, Backmarker Best): closest to the actual number wins the full points. If equidistant, earlier submission wins.</p>
+    <p>For numerical picks (Different Winners, Backmarker Best): closest to the actual number wins the full points. If equidistant, earlier submission wins.</p>
 
     <h3>Tiebreaker</h3>
     <p>If tied at season end: (1) most correct Big Picture picks; (2) most correct constructor positions; (3) most race podium points.</p>
@@ -1154,8 +1157,8 @@ function renderComparison() {
     html += '<li class="header"><span class="col-label">Question</span><span class="col-pick">Martin</span><span class="col-pick">Audrey</span></li>';
     html += '<li><span class="col-label">Drivers\' Champion</span>' + pick(mp.driversChamp) + pick(ap.driversChamp) + '</li>';
     html += '<li><span class="col-label">Constructors\' Champion</span>' + pick(mp.constructorsChamp) + pick(ap.constructorsChamp) + '</li>';
-    html += '<li><span class="col-label">Lindblad WDC Pos</span>' + pick(mp.lindbladPos ? 'P' + mp.lindbladPos : '') + pick(ap.lindbladPos ? 'P' + ap.lindbladPos : '') + '</li>';
-    html += '<li><span class="col-label">Highest 2nd-Year</span>' + pick(mp.highestSophomore) + pick(ap.highestSophomore) + '</li>';
+    html += '<li><span class="col-label">Best Rookie</span>' + pick(mp.bestRookie) + pick(ap.bestRookie) + '</li>';
+    html += '<li><span class="col-label">Best 2nd-Year</span>' + pick(mp.bestSophomore) + pick(ap.bestSophomore) + '</li>';
     html += '<li><span class="col-label">Most Wins</span>' + pick(mp.mostWins) + pick(ap.mostWins) + '</li>';
     html += '<li><span class="col-label">Most Poles</span>' + pick(mp.mostPoles) + pick(ap.mostPoles) + '</li>';
     html += '</ul>';
