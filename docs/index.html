@@ -806,12 +806,7 @@
     </div>
 
     <div class="btn-row">
-        <button class="btn" onclick="saveAndExport()">Save &amp; Copy JSON</button>
-    </div>
-
-    <div id="export-area" style="display:none; margin-top:24px;">
-        <label style="font-size:10px; font-weight:bold; letter-spacing:0.06em; text-transform:uppercase; display:block; margin-bottom:6px;">Updated picks.json &mdash; Send this to Martin to commit</label>
-        <textarea class="code-box" id="export-code" readonly></textarea>
+        <button class="btn" onclick="saveAndExport()">Save Picks</button>
     </div>
 </section>
 
@@ -1068,16 +1063,60 @@ function resetForm() {
     document.querySelectorAll('[data-podium]').forEach(sel => sel.value = '');
 }
 
-// ———— Save & Export JSON ————
-function saveAndExport() {
+// ———— GitHub API Save ————
+const GITHUB_REPO = 'CapitalStructuresInc/f1-predictor';
+const PICKS_PATH = 'docs/picks.json';
+
+function getToken() {
+    let token = localStorage.getItem('gridposition_gh_token');
+    if (!token) {
+        token = prompt('Enter your GitHub token (one time only — stored locally):');
+        if (token) localStorage.setItem('gridposition_gh_token', token);
+    }
+    return token;
+}
+
+async function saveAndExport() {
     gatherCurrentPicks();
-    const json = JSON.stringify(allPicks, null, 2);
-    document.getElementById('export-code').value = json;
-    document.getElementById('export-area').style.display = 'block';
-    document.getElementById('export-code').select();
-    document.execCommand('copy');
-    showToast('JSON copied — paste it to Martin to commit');
     renderComparison();
+
+    const token = getToken();
+    if (!token) { showToast('No token — picks not saved to GitHub'); return; }
+
+    const json = JSON.stringify(allPicks, null, 2) + '\n';
+    const content = btoa(unescape(encodeURIComponent(json)));
+
+    try {
+        // Get current file SHA
+        const getResp = await fetch('https://api.github.com/repos/' + GITHUB_REPO + '/contents/' + PICKS_PATH, {
+            headers: { 'Authorization': 'Bearer ' + token }
+        });
+        const fileData = await getResp.json();
+        const sha = fileData.sha;
+
+        // Commit updated picks
+        const putResp = await fetch('https://api.github.com/repos/' + GITHUB_REPO + '/contents/' + PICKS_PATH, {
+            method: 'PUT',
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                message: 'Update picks — ' + (currentEntrant === 'martin' ? 'Martin' : 'Audrey'),
+                content: content,
+                sha: sha
+            })
+        });
+
+        if (putResp.ok) {
+            showToast('Saved to GitHub — site will update shortly');
+        } else {
+            const err = await putResp.json();
+            showToast('Save failed: ' + (err.message || 'unknown error'));
+        }
+    } catch (e) {
+        showToast('Save failed: ' + e.message);
+    }
 }
 
 // ———— Comparison ————
