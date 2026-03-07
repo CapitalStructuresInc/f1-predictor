@@ -687,15 +687,6 @@
         </div>
 
         <div class="form-group">
-            <label>Best Rookie</label>
-            <p class="hint">Lindblad is the only 2026 rookie.</p>
-            <select data-field="bestRookie">
-                <option value="">Select...</option>
-                <option>Arvid Lindblad</option>
-            </select>
-        </div>
-
-        <div class="form-group">
             <label>Best Second-Year Driver</label>
             <p class="hint">Antonelli, Hadjar, Bearman, Bortoleto, or Colapinto?</p>
             <select data-field="bestSophomore">
@@ -856,11 +847,11 @@
     <h3>Points Breakdown</h3>
     <ul class="comparison-grid">
         <li class="header"><span class="col-label">Category</span><span class="col-pick">Per Question</span><span class="col-pick">Max Total</span></li>
-        <li><span class="col-label">Big Picture (6 questions)</span><span class="col-pick">25 pts</span><span class="col-pick">150 pts</span></li>
+        <li><span class="col-label">Big Picture (5 questions)</span><span class="col-pick">25 pts</span><span class="col-pick">125 pts</span></li>
         <li><span class="col-label">Constructor Ranking (11 teams)</span><span class="col-pick">0&ndash;5 pts each</span><span class="col-pick">55 pts</span></li>
         <li><span class="col-label">Season Calls (10 questions)</span><span class="col-pick">10 pts</span><span class="col-pick">100 pts</span></li>
         <li><span class="col-label">Race Podiums (24 races)</span><span class="col-pick">Up to 6 pts</span><span class="col-pick">144 pts</span></li>
-        <li style="font-weight:bold;"><span class="col-label">Total</span><span class="col-pick"></span><span class="col-pick">449 pts</span></li>
+        <li style="font-weight:bold;"><span class="col-label">Total</span><span class="col-pick"></span><span class="col-pick">424 pts</span></li>
     </ul>
 
     <h3>Constructor Ranking Scoring</h3>
@@ -1157,7 +1148,6 @@ function renderComparison() {
     html += '<li class="header"><span class="col-label">Question</span><span class="col-pick">Martin</span><span class="col-pick">Audrey</span></li>';
     html += '<li><span class="col-label">Drivers\' Champion</span>' + pick(mp.driversChamp) + pick(ap.driversChamp) + '</li>';
     html += '<li><span class="col-label">Constructors\' Champion</span>' + pick(mp.constructorsChamp) + pick(ap.constructorsChamp) + '</li>';
-    html += '<li><span class="col-label">Best Rookie</span>' + pick(mp.bestRookie) + pick(ap.bestRookie) + '</li>';
     html += '<li><span class="col-label">Best 2nd-Year</span>' + pick(mp.bestSophomore) + pick(ap.bestSophomore) + '</li>';
     html += '<li><span class="col-label">Most Wins</span>' + pick(mp.mostWins) + pick(ap.mostWins) + '</li>';
     html += '<li><span class="col-label">Most Poles</span>' + pick(mp.mostPoles) + pick(ap.mostPoles) + '</li>';
