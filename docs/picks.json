@@ -1,0 +1,52 @@
+{
+  "martin": {
+    "preseason": {
+      "driversChamp": "",
+      "constructorsChamp": "",
+      "bestSophomore": "",
+      "mostWins": "",
+      "mostPoles": "",
+      "firstDNF": "",
+      "surpriseConstructor": "",
+      "disappointDriver": "",
+      "numWinners": "",
+      "mostDNFs": "",
+      "mostPenalties": "",
+      "firstDoubleDNF": "",
+      "replacedDriver": "",
+      "firstBan": "",
+      "backmarkerBest": ""
+    },
+    "constructorRanking": [
+      "Red Bull Racing", "Ferrari", "McLaren", "Mercedes",
+      "Aston Martin", "Alpine", "Williams", "Racing Bulls",
+      "Haas", "Audi", "Cadillac"
+    ],
+    "podiums": {}
+  },
+  "audrey": {
+    "preseason": {
+      "driversChamp": "",
+      "constructorsChamp": "",
+      "bestSophomore": "",
+      "mostWins": "",
+      "mostPoles": "",
+      "firstDNF": "",
+      "surpriseConstructor": "",
+      "disappointDriver": "",
+      "numWinners": "",
+      "mostDNFs": "",
+      "mostPenalties": "",
+      "firstDoubleDNF": "",
+      "replacedDriver": "",
+      "firstBan": "",
+      "backmarkerBest": ""
+    },
+    "constructorRanking": [
+      "Red Bull Racing", "Ferrari", "McLaren", "Mercedes",
+      "Aston Martin", "Alpine", "Williams", "Racing Bulls",
+      "Haas", "Audi", "Cadillac"
+    ],
+    "podiums": {}
+  }
+}

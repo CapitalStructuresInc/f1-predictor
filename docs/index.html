@@ -806,22 +806,12 @@
     </div>
 
     <div class="btn-row">
-        <button class="btn" onclick="savePicks()">Save Picks</button>
-        <button class="btn btn-outline" onclick="exportPicks()">Export Code</button>
-        <button class="btn btn-outline" onclick="promptImport()">Import Opponent</button>
+        <button class="btn" onclick="saveAndExport()">Save &amp; Copy JSON</button>
     </div>
 
     <div id="export-area" style="display:none; margin-top:24px;">
-        <label style="font-size:10px; font-weight:bold; letter-spacing:0.06em; text-transform:uppercase; display:block; margin-bottom:6px;">Your Pick Code &mdash; Send This to Your Opponent</label>
+        <label style="font-size:10px; font-weight:bold; letter-spacing:0.06em; text-transform:uppercase; display:block; margin-bottom:6px;">Updated picks.json &mdash; Send this to Martin to commit</label>
         <textarea class="code-box" id="export-code" readonly></textarea>
-    </div>
-
-    <div id="import-area" style="display:none; margin-top:24px;">
-        <label style="font-size:10px; font-weight:bold; letter-spacing:0.06em; text-transform:uppercase; display:block; margin-bottom:6px;">Paste Opponent's Code</label>
-        <textarea class="code-box" id="import-code" placeholder="Paste code here..."></textarea>
-        <div class="btn-row">
-            <button class="btn" onclick="importPicks()">Load Opponent Picks</button>
-        </div>
     </div>
 </section>
 
@@ -934,14 +924,28 @@ const RACES = [
 ];
 
 let currentEntrant = 'martin';
+let allPicks = { martin: { preseason: {}, constructorRanking: [], podiums: {} }, audrey: { preseason: {}, constructorRanking: [], podiums: {} } };
 
 // ———— Init ————
-function init() {
+async function init() {
     populateDriverSelects();
     populateConstructorSelects();
     buildRacePodiums();
-    loadPicks();
+    await loadPicksFromServer();
+    applyPicks(allPicks[currentEntrant]);
     renderComparison();
+}
+
+async function loadPicksFromServer() {
+    try {
+        const resp = await fetch('picks.json?t=' + Date.now());
+        if (resp.ok) {
+            const data = await resp.json();
+            allPicks = data;
+        }
+    } catch (e) {
+        console.log('No picks.json found, using defaults');
+    }
 }
 
 function populateDriverSelects() {
@@ -999,41 +1003,38 @@ function switchTab(tabId) {
 
 // ———— Entrant selector ————
 function selectEntrant(name) {
-    savePicks(); // save current before switching
+    gatherCurrentPicks();
     currentEntrant = name;
     document.querySelectorAll('.entrant-btn').forEach(b => b.classList.remove('active'));
     document.querySelector('.entrant-btn[onclick*="' + name + '"]').classList.add('active');
-    loadPicks();
+    resetForm();
+    applyPicks(allPicks[currentEntrant]);
     showToast('Switched to ' + (name === 'martin' ? 'Martin' : 'Audrey'));
 }
 
-// ———— Save / Load ————
-function gatherPicks() {
+// ———— Gather / Apply ————
+function gatherCurrentPicks() {
     const picks = { preseason: {}, constructorRanking: [], podiums: {} };
 
-    // Pre-season selects and inputs
     document.querySelectorAll('[data-field]').forEach(el => {
         picks.preseason[el.dataset.field] = el.value;
     });
 
-
-    // Constructor ranking
     document.querySelectorAll('#constructor-rank-list .rank-item').forEach(item => {
         picks.constructorRanking.push(item.dataset.team);
     });
 
-    // Race podiums
     document.querySelectorAll('[data-podium]').forEach(sel => {
         picks.podiums[sel.dataset.podium] = sel.value;
     });
 
+    allPicks[currentEntrant] = picks;
     return picks;
 }
 
 function applyPicks(picks) {
     if (!picks) return;
 
-    // Pre-season
     if (picks.preseason) {
         document.querySelectorAll('[data-field]').forEach(el => {
             if (picks.preseason[el.dataset.field] !== undefined) {
@@ -1042,7 +1043,6 @@ function applyPicks(picks) {
         });
     }
 
-    // Constructor ranking
     if (picks.constructorRanking && picks.constructorRanking.length) {
         const list = document.getElementById('constructor-rank-list');
         const items = Array.from(list.querySelectorAll('.rank-item'));
@@ -1053,7 +1053,6 @@ function applyPicks(picks) {
         updateRankNumbers();
     }
 
-    // Podiums
     if (picks.podiums) {
         document.querySelectorAll('[data-podium]').forEach(sel => {
             if (picks.podiums[sel.dataset.podium] !== undefined) {
@@ -1064,72 +1063,28 @@ function applyPicks(picks) {
     }
 }
 
-function savePicks() {
-    const picks = gatherPicks();
-    localStorage.setItem('gridposition_' + currentEntrant, JSON.stringify(picks));
-    renderComparison();
-}
-
-function loadPicks() {
-    // Reset form
+function resetForm() {
     document.querySelectorAll('[data-field]').forEach(el => el.value = '');
-document.querySelectorAll('[data-podium]').forEach(sel => sel.value = '');
-
-    const stored = localStorage.getItem('gridposition_' + currentEntrant);
-    if (stored) {
-        applyPicks(JSON.parse(stored));
-    }
+    document.querySelectorAll('[data-podium]').forEach(sel => sel.value = '');
 }
 
-// ———— Export / Import ————
-function exportPicks() {
-    savePicks();
-    const picks = gatherPicks();
-    picks._entrant = currentEntrant;
-    const code = btoa(unescape(encodeURIComponent(JSON.stringify(picks))));
-    document.getElementById('export-code').value = code;
+// ———— Save & Export JSON ————
+function saveAndExport() {
+    gatherCurrentPicks();
+    const json = JSON.stringify(allPicks, null, 2);
+    document.getElementById('export-code').value = json;
     document.getElementById('export-area').style.display = 'block';
-    document.getElementById('import-area').style.display = 'none';
     document.getElementById('export-code').select();
-    showToast('Code generated — copy and send');
-}
-
-function promptImport() {
-    document.getElementById('import-area').style.display = 'block';
-    document.getElementById('export-area').style.display = 'none';
-    document.getElementById('import-code').value = '';
-    document.getElementById('import-code').focus();
-}
-
-function importPicks() {
-    const code = document.getElementById('import-code').value.trim();
-    if (!code) return;
-    try {
-        const json = JSON.parse(decodeURIComponent(escape(atob(code))));
-        const entrant = json._entrant || (currentEntrant === 'martin' ? 'audrey' : 'martin');
-        delete json._entrant;
-        localStorage.setItem('gridposition_' + entrant, JSON.stringify(json));
-        renderComparison();
-        showToast('Loaded ' + (entrant === 'martin' ? 'Martin' : 'Audrey') + "'s picks");
-        document.getElementById('import-area').style.display = 'none';
-    } catch (e) {
-        showToast('Invalid code — try again');
-    }
+    document.execCommand('copy');
+    showToast('JSON copied — paste it to Martin to commit');
+    renderComparison();
 }
 
 // ———— Comparison ————
 function renderComparison() {
     const container = document.getElementById('comparison-container');
-    const martinRaw = localStorage.getItem('gridposition_martin');
-    const audreyRaw = localStorage.getItem('gridposition_audrey');
-
-    if (!martinRaw && !audreyRaw) {
-        container.innerHTML = '<p style="font-style:italic; color:#999;">Both entrants must save their picks to see the comparison.</p>';
-        return;
-    }
-
-    const martin = martinRaw ? JSON.parse(martinRaw) : { preseason: {}, constructorRanking: [], podiums: {} };
-    const audrey = audreyRaw ? JSON.parse(audreyRaw) : { preseason: {}, constructorRanking: [], podiums: {} };
+    const martin = allPicks.martin || { preseason: {}, constructorRanking: [], podiums: {} };
+    const audrey = allPicks.audrey || { preseason: {}, constructorRanking: [], podiums: {} };
 
     const mp = martin.preseason || {};
     const ap = audrey.preseason || {};
@@ -1314,9 +1269,10 @@ function showToast(msg) {
     setTimeout(() => toast.classList.remove('show'), 2500);
 }
 
-// ———— Auto-save on change ————
+// ———— Auto-gather on change ————
 document.addEventListener('change', () => {
-    savePicks();
+    gatherCurrentPicks();
+    renderComparison();
 });
 
 // ———— Boot ————
