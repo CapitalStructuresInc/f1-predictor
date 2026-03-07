@@ -666,9 +666,7 @@
     <div class="tabs">
         <button class="tab-btn active" onclick="switchTab('big-picture')">Big Picture</button>
         <button class="tab-btn" onclick="switchTab('constructors')">Constructors</button>
-        <button class="tab-btn" onclick="switchTab('season-texture')">Season Texture</button>
-        <button class="tab-btn" onclick="switchTab('losers')">Losers</button>
-        <button class="tab-btn" onclick="switchTab('chaos')">Chaos &amp; Drama</button>
+        <button class="tab-btn" onclick="switchTab('season-calls')">Season Calls</button>
         <button class="tab-btn" onclick="switchTab('podiums')">Race Podiums</button>
     </div>
 
@@ -698,6 +696,7 @@
                 <option>Oliver Bearman</option>
                 <option>Gabriel Bortoleto</option>
                 <option>Franco Colapinto</option>
+                <option>Liam Lawson</option>
                 <option>Arvid Lindblad</option>
             </select>
         </div>
@@ -733,15 +732,9 @@
         </ul>
     </div>
 
-    <!-- Season Texture -->
-    <div class="tab-panel" id="panel-season-texture">
-        <div class="points-badge">Season Texture &mdash; 15 pts each</div>
-
-        <div class="form-group">
-            <label>First Race Winner of the Season</label>
-            <p class="hint">Who wins Round 01 in Melbourne?</p>
-            <select data-field="firstWinner"></select>
-        </div>
+    <!-- Season Calls -->
+    <div class="tab-panel" id="panel-season-calls">
+        <div class="points-badge">Season Calls &mdash; 10 pts each</div>
 
         <div class="form-group">
             <label>First DNF of the Season</label>
@@ -765,17 +758,6 @@
             <label>Number of Different Race Winners</label>
             <p class="hint">Pick a number. Closest to actual count wins.</p>
             <input type="number" data-field="numWinners" min="1" max="24" placeholder="e.g. 7">
-        </div>
-    </div>
-
-    <!-- Losers -->
-    <div class="tab-panel" id="panel-losers">
-        <div class="points-badge">Losers &mdash; 10 pts each</div>
-
-        <div class="form-group">
-            <label>Last Place Constructor</label>
-            <p class="hint">Who finishes P11 in the constructors' standings?</p>
-            <select data-field="lastConstructor"></select>
         </div>
 
         <div class="form-group">
@@ -801,39 +783,11 @@
             <p class="hint">Pick a driver who loses their seat during the season, or &ldquo;None&rdquo;.</p>
             <select data-field="replacedDriver"></select>
         </div>
-    </div>
-
-    <!-- Chaos & Drama -->
-    <div class="tab-panel" id="panel-chaos">
-        <div class="points-badge">Chaos &amp; Drama &mdash; 10 pts each</div>
-
-        <div class="form-group">
-            <label>Total Red Flags &mdash; Full Season</label>
-            <p class="hint">Pick a number. Closest wins.</p>
-            <input type="number" data-field="redFlags" min="0" max="50" placeholder="e.g. 8">
-        </div>
-
-        <div class="form-group">
-            <label>Total Safety Cars &mdash; Full Season</label>
-            <p class="hint">Pick a number. Closest wins.</p>
-            <input type="number" data-field="safetyCars" min="0" max="100" placeholder="e.g. 30">
-        </div>
 
         <div class="form-group">
             <label>First Race Ban or Disqualification</label>
             <p class="hint">Which driver?</p>
             <select data-field="firstBan"></select>
-        </div>
-
-        <div class="form-group">
-            <label>Mid-Season Engine Supplier Switch</label>
-            <p class="hint">Will any team switch engines mid-season?</p>
-            <div class="radio-group">
-                <input type="radio" name="engineSwitch" id="engine-yes" value="Yes">
-                <label for="engine-yes">Yes</label>
-                <input type="radio" name="engineSwitch" id="engine-no" value="No">
-                <label for="engine-no">No</label>
-            </div>
         </div>
 
         <div class="form-group">
@@ -888,9 +842,7 @@
     <div class="scoring-meta">
         <span><strong>Big Picture</strong>25 pts each</span>
         <span><strong>Constructors</strong>Up to 55 pts</span>
-        <span><strong>Season Texture</strong>15 pts each</span>
-        <span><strong>Losers</strong>10 pts each</span>
-        <span><strong>Chaos &amp; Drama</strong>10 pts each</span>
+        <span><strong>Season Calls</strong>10 pts each</span>
         <span><strong>Race Podiums</strong>3/2/1 per race</span>
     </div>
 
@@ -899,11 +851,9 @@
         <li class="header"><span class="col-label">Category</span><span class="col-pick">Per Question</span><span class="col-pick">Max Total</span></li>
         <li><span class="col-label">Big Picture (5 questions)</span><span class="col-pick">25 pts</span><span class="col-pick">125 pts</span></li>
         <li><span class="col-label">Constructor Ranking (11 teams)</span><span class="col-pick">0&ndash;5 pts each</span><span class="col-pick">55 pts</span></li>
-        <li><span class="col-label">Season Texture (5 questions)</span><span class="col-pick">15 pts</span><span class="col-pick">75 pts</span></li>
-        <li><span class="col-label">Losers (5 questions)</span><span class="col-pick">10 pts</span><span class="col-pick">50 pts</span></li>
-        <li><span class="col-label">Chaos &amp; Drama (5 questions)</span><span class="col-pick">10 pts</span><span class="col-pick">50 pts</span></li>
+        <li><span class="col-label">Season Calls (10 questions)</span><span class="col-pick">10 pts</span><span class="col-pick">100 pts</span></li>
         <li><span class="col-label">Race Podiums (24 races)</span><span class="col-pick">Up to 6 pts</span><span class="col-pick">144 pts</span></li>
-        <li style="font-weight:bold;"><span class="col-label">Total</span><span class="col-pick"></span><span class="col-pick">499 pts</span></li>
+        <li style="font-weight:bold;"><span class="col-label">Total</span><span class="col-pick"></span><span class="col-pick">424 pts</span></li>
     </ul>
 
     <h3>Constructor Ranking Scoring</h3>
@@ -913,7 +863,7 @@
     <p>Correct P1 = 3 pts. Correct P2 = 2 pts. Correct P3 = 1 pt. If you pick a driver who finishes on the podium but in the wrong position, +1 bonus pt.</p>
 
     <h3>Over/Under Scoring</h3>
-    <p>For numerical picks (Red Flags, Safety Cars, Different Winners, Backmarker Best): closest to the actual number wins the full points. If equidistant, earlier submission wins.</p>
+    <p>For numerical picks (Different Winners, Backmarker Best): closest to the actual number wins the full points. If equidistant, earlier submission wins.</p>
 
     <h3>Tiebreaker</h3>
     <p>If tied at season end: (1) most correct Big Picture picks; (2) most correct constructor positions; (3) most race podium points.</p>
@@ -997,7 +947,7 @@ function init() {
 }
 
 function populateDriverSelects() {
-    document.querySelectorAll('select[data-field="driversChamp"], select[data-field="mostWins"], select[data-field="mostPoles"], select[data-field="firstWinner"], select[data-field="firstDNF"], select[data-field="disappointDriver"], select[data-field="mostDNFs"], select[data-field="mostPenalties"], select[data-field="firstBan"], select[data-field="replacedDriver"]').forEach(sel => {
+    document.querySelectorAll('select[data-field="driversChamp"], select[data-field="mostWins"], select[data-field="mostPoles"], select[data-field="firstDNF"], select[data-field="disappointDriver"], select[data-field="mostDNFs"], select[data-field="mostPenalties"], select[data-field="firstBan"], select[data-field="replacedDriver"]').forEach(sel => {
         sel.innerHTML = '<option value="">Select...</option>';
         if (sel.dataset.field === 'replacedDriver') {
             sel.innerHTML += '<option value="None">None</option>';
@@ -1009,7 +959,7 @@ function populateDriverSelects() {
 }
 
 function populateConstructorSelects() {
-    document.querySelectorAll('select[data-field="constructorsChamp"], select[data-field="surpriseConstructor"], select[data-field="lastConstructor"], select[data-field="firstDoubleDNF"]').forEach(sel => {
+    document.querySelectorAll('select[data-field="constructorsChamp"], select[data-field="surpriseConstructor"], select[data-field="firstDoubleDNF"]').forEach(sel => {
         sel.innerHTML = '<option value="">Select...</option>';
         CONSTRUCTORS.forEach(c => {
             sel.innerHTML += '<option value="' + c + '">' + c + '</option>';
@@ -1068,9 +1018,6 @@ function gatherPicks() {
         picks.preseason[el.dataset.field] = el.value;
     });
 
-    // Engine switch radio
-    const engineRadio = document.querySelector('input[name="engineSwitch"]:checked');
-    picks.preseason.engineSwitch = engineRadio ? engineRadio.value : '';
 
     // Constructor ranking
     document.querySelectorAll('#constructor-rank-list .rank-item').forEach(item => {
@@ -1095,10 +1042,6 @@ function applyPicks(picks) {
                 el.value = picks.preseason[el.dataset.field];
             }
         });
-        if (picks.preseason.engineSwitch) {
-            const radio = document.querySelector('input[name="engineSwitch"][value="' + picks.preseason.engineSwitch + '"]');
-            if (radio) radio.checked = true;
-        }
     }
 
     // Constructor ranking
@@ -1132,8 +1075,7 @@ function savePicks() {
 function loadPicks() {
     // Reset form
     document.querySelectorAll('[data-field]').forEach(el => el.value = '');
-    document.querySelectorAll('input[name="engineSwitch"]').forEach(r => r.checked = false);
-    document.querySelectorAll('[data-podium]').forEach(sel => sel.value = '');
+document.querySelectorAll('[data-podium]').forEach(sel => sel.value = '');
 
     const stored = localStorage.getItem('gridposition_' + currentEntrant);
     if (stored) {
@@ -1225,36 +1167,19 @@ function renderComparison() {
     }
     html += '</ul>';
 
-    // Season Texture
-    html += '<h3>Season Texture &mdash; 15 pts each</h3>';
+    // Season Calls
+    html += '<h3>Season Calls &mdash; 10 pts each</h3>';
     html += '<ul class="comparison-grid">';
     html += '<li class="header"><span class="col-label">Question</span><span class="col-pick">Martin</span><span class="col-pick">Audrey</span></li>';
-    html += '<li><span class="col-label">First Winner</span>' + pick(mp.firstWinner) + pick(ap.firstWinner) + '</li>';
     html += '<li><span class="col-label">First DNF</span>' + pick(mp.firstDNF) + pick(ap.firstDNF) + '</li>';
     html += '<li><span class="col-label">Surprise Constructor</span>' + pick(mp.surpriseConstructor) + pick(ap.surpriseConstructor) + '</li>';
     html += '<li><span class="col-label">Disappointing Driver</span>' + pick(mp.disappointDriver) + pick(ap.disappointDriver) + '</li>';
     html += '<li><span class="col-label">Different Winners</span>' + pick(mp.numWinners) + pick(ap.numWinners) + '</li>';
-    html += '</ul>';
-
-    // Losers
-    html += '<h3>Losers &mdash; 10 pts each</h3>';
-    html += '<ul class="comparison-grid">';
-    html += '<li class="header"><span class="col-label">Question</span><span class="col-pick">Martin</span><span class="col-pick">Audrey</span></li>';
-    html += '<li><span class="col-label">Last Constructor</span>' + pick(mp.lastConstructor) + pick(ap.lastConstructor) + '</li>';
     html += '<li><span class="col-label">Most DNFs</span>' + pick(mp.mostDNFs) + pick(ap.mostDNFs) + '</li>';
     html += '<li><span class="col-label">Most Penalties</span>' + pick(mp.mostPenalties) + pick(ap.mostPenalties) + '</li>';
     html += '<li><span class="col-label">First Double DNF</span>' + pick(mp.firstDoubleDNF) + pick(ap.firstDoubleDNF) + '</li>';
     html += '<li><span class="col-label">Replaced Mid-Season</span>' + pick(mp.replacedDriver) + pick(ap.replacedDriver) + '</li>';
-    html += '</ul>';
-
-    // Chaos
-    html += '<h3>Chaos &amp; Drama &mdash; 10 pts each</h3>';
-    html += '<ul class="comparison-grid">';
-    html += '<li class="header"><span class="col-label">Question</span><span class="col-pick">Martin</span><span class="col-pick">Audrey</span></li>';
-    html += '<li><span class="col-label">Red Flags</span>' + pick(mp.redFlags) + pick(ap.redFlags) + '</li>';
-    html += '<li><span class="col-label">Safety Cars</span>' + pick(mp.safetyCars) + pick(ap.safetyCars) + '</li>';
     html += '<li><span class="col-label">First Ban/DSQ</span>' + pick(mp.firstBan) + pick(ap.firstBan) + '</li>';
-    html += '<li><span class="col-label">Engine Switch</span>' + pick(mp.engineSwitch) + pick(ap.engineSwitch) + '</li>';
     html += '<li><span class="col-label">Backmarker Best</span>' + pick(mp.backmarkerBest ? 'P' + mp.backmarkerBest : '') + pick(ap.backmarkerBest ? 'P' + ap.backmarkerBest : '') + '</li>';
     html += '</ul>';
 
