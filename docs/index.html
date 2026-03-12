@@ -398,6 +398,71 @@
             text-align: right;
         }
 
+        .standings-breakdown {
+            max-width: 720px;
+            margin-top: 24px;
+        }
+        .standings-breakdown h3 {
+            font-size: 11px;
+            font-weight: bold;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+        .race-score-row {
+            display: grid;
+            grid-template-columns: 120px 1fr 1fr;
+            align-items: baseline;
+            padding: 6px 0;
+            border-bottom: 0.5px solid #000;
+            font-size: 13px;
+        }
+        .race-score-row.header {
+            font-size: 9px;
+            font-weight: bold;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            border-bottom: 1.5px solid #000;
+            padding-bottom: 6px;
+        }
+        .race-score-row .score-cell {
+            padding-left: 16px;
+            border-left: 0.5px solid #000;
+            font-family: '188 Sans Mono', 'Courier New', monospace;
+            font-size: 12px;
+        }
+        .race-score-row .score-cell.leading {
+            font-weight: bold;
+        }
+        .standings-leader {
+            font-size: 13px;
+            margin-top: 16px;
+            padding: 10px 0;
+            border-top: 1.5px solid #000;
+            font-weight: bold;
+            letter-spacing: 0.02em;
+        }
+        .pick-correct {
+            color: #000;
+            font-weight: bold;
+        }
+        .pick-correct::before {
+            content: "\2713 ";
+        }
+        .pick-wrong-pos::before {
+            content: "\25CB ";
+        }
+        .pick-miss {
+            color: #999;
+        }
+        .result-actual {
+            font-size: 11px;
+            color: #666;
+            font-style: italic;
+            display: block;
+            margin-top: 2px;
+        }
+
         /* —— Race tracker —— */
         .race-tracker {
             max-width: 720px;
@@ -613,8 +678,8 @@
     <h2 id="standings"><span>Standings &mdash; 2026 Season</span></h2>
 
     <div class="race-tracker">
-        <div class="race-dot next" data-race="Australia">01</div>
-        <div class="race-dot" data-race="China">02</div>
+        <div class="race-dot completed" data-race="Australia">01</div>
+        <div class="race-dot next" data-race="China">02</div>
         <div class="race-dot" data-race="Japan">03</div>
         <div class="race-dot" data-race="Bahrain">04</div>
         <div class="race-dot" data-race="Saudi Arabia">05</div>
@@ -647,11 +712,12 @@
                 <th>Points</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="standings-tbody">
             <tr><td>P1</td><td>Martin Grasser</td><td>0</td></tr>
-            <tr><td>P1</td><td>Audrey Chen</td><td>0</td></tr>
+            <tr><td>P2</td><td>Audrey Chen</td><td>0</td></tr>
         </tbody>
     </table>
+    <div class="standings-breakdown" id="standings-breakdown"></div>
 </section>
 
 <!-- Enter Picks -->
@@ -918,6 +984,15 @@ const RACES = [
     { id: '24', name: 'Abu Dhabi Grand Prix', city: 'Yas Marina', date: 'Dec 4\u20136' }
 ];
 
+const RESULTS = {
+    races: {
+        '01': { p1: 'George Russell', p2: 'Andrea Kimi Antonelli', p3: 'Charles Leclerc' }
+    },
+    // Season-long results will be added as season progresses
+    seasonCalls: {},
+    constructorStandings: []  // filled at season end
+};
+
 let currentEntrant = 'martin';
 let allPicks = { martin: { preseason: {}, constructorRanking: [], podiums: {} }, audrey: { preseason: {}, constructorRanking: [], podiums: {} } };
 
@@ -929,6 +1004,7 @@ async function init() {
     await loadPicksFromServer();
     applyPicks(allPicks[currentEntrant]);
     renderComparison();
+    renderStandings();
 }
 
 async function loadPicksFromServer() {
@@ -1180,11 +1256,45 @@ function renderComparison() {
     html += '<ul class="comparison-grid">';
     html += '<li class="header"><span class="col-label">Race</span><span class="col-pick">Martin</span><span class="col-pick">Audrey</span></li>';
     RACES.forEach(race => {
-        const mPod = [martin.podiums[race.id + '-p1'], martin.podiums[race.id + '-p2'], martin.podiums[race.id + '-p3']].filter(Boolean);
-        const aPod = [audrey.podiums[race.id + '-p1'], audrey.podiums[race.id + '-p2'], audrey.podiums[race.id + '-p3']].filter(Boolean);
-        const mStr = mPod.length ? mPod.map(d => d.split(' ').pop()).join(', ') : '';
-        const aStr = aPod.length ? aPod.map(d => d.split(' ').pop()).join(', ') : '';
-        html += '<li><span class="col-label">' + race.id + ' ' + race.city + '</span>' + pick(mStr) + pick(aStr) + '</li>';
+        const result = RESULTS.races[race.id];
+        const mPicks = [martin.podiums[race.id + '-p1'], martin.podiums[race.id + '-p2'], martin.podiums[race.id + '-p3']];
+        const aPicks = [audrey.podiums[race.id + '-p1'], audrey.podiums[race.id + '-p2'], audrey.podiums[race.id + '-p3']];
+
+        if (result) {
+            const actualPodium = [result.p1, result.p2, result.p3];
+            const positions = ['P1', 'P2', 'P3'];
+            const posPoints = [3, 2, 1];
+
+            function formatPickWithResult(pickArr, actual, actualPodium) {
+                let parts = [];
+                let totalPts = 0;
+                for (let i = 0; i < 3; i++) {
+                    const p = pickArr[i];
+                    const lastName = p ? p.split(' ').pop() : '';
+                    if (!p) { parts.push('--'); continue; }
+                    if (p === actual[i]) {
+                        parts.push('<span class="pick-correct">' + lastName + '</span>');
+                        totalPts += posPoints[i];
+                    } else if (actualPodium.includes(p)) {
+                        parts.push('<span class="pick-wrong-pos">' + lastName + '</span>');
+                        totalPts += 1;
+                    } else {
+                        parts.push('<span class="pick-miss">' + lastName + '</span>');
+                    }
+                }
+                return parts.join(', ') + '<span class="result-actual">' + totalPts + ' pts &mdash; Actual: ' + actual.map(d => d.split(' ').pop()).join(', ') + '</span>';
+            }
+
+            const mStr = formatPickWithResult(mPicks, actualPodium, actualPodium);
+            const aStr = formatPickWithResult(aPicks, actualPodium, actualPodium);
+            html += '<li><span class="col-label">' + race.id + ' ' + race.city + '</span><span class="col-pick">' + mStr + '</span><span class="col-pick">' + aStr + '</span></li>';
+        } else {
+            const mFiltered = mPicks.filter(Boolean);
+            const aFiltered = aPicks.filter(Boolean);
+            const mStr = mFiltered.length ? mFiltered.map(d => d.split(' ').pop()).join(', ') : '';
+            const aStr = aFiltered.length ? aFiltered.map(d => d.split(' ').pop()).join(', ') : '';
+            html += '<li><span class="col-label">' + race.id + ' ' + race.city + '</span>' + pick(mStr) + pick(aStr) + '</li>';
+        }
     });
     html += '</ul>';
 
@@ -1313,6 +1423,101 @@ document.addEventListener('change', () => {
     gatherCurrentPicks();
     renderComparison();
 });
+
+// ———— Scoring ————
+function calculateScores() {
+    const scores = {
+        martin: { total: 0 },
+        audrey: { total: 0 }
+    };
+
+    Object.keys(RESULTS.races).forEach(raceId => {
+        const actual = RESULTS.races[raceId];
+        const actualPodium = [actual.p1, actual.p2, actual.p3];
+
+        ['martin', 'audrey'].forEach(player => {
+            const picks = allPicks[player] && allPicks[player].podiums ? allPicks[player].podiums : {};
+            const pickP1 = picks[raceId + '-p1'] || '';
+            const pickP2 = picks[raceId + '-p2'] || '';
+            const pickP3 = picks[raceId + '-p3'] || '';
+            let pts = 0;
+            let detail = [];
+
+            // Exact position matches
+            if (pickP1 && pickP1 === actual.p1) { pts += 3; detail.push('P1 exact +3'); }
+            else if (pickP1 && actualPodium.includes(pickP1)) { pts += 1; detail.push('P1 on podium +1'); }
+
+            if (pickP2 && pickP2 === actual.p2) { pts += 2; detail.push('P2 exact +2'); }
+            else if (pickP2 && actualPodium.includes(pickP2)) { pts += 1; detail.push('P2 on podium +1'); }
+
+            if (pickP3 && pickP3 === actual.p3) { pts += 1; detail.push('P3 exact +1'); }
+            else if (pickP3 && actualPodium.includes(pickP3)) { pts += 1; detail.push('P3 on podium +1'); }
+
+            scores[player]['race' + raceId] = { pts: pts, detail: detail };
+            scores[player].total += pts;
+        });
+    });
+
+    return scores;
+}
+
+function renderStandings() {
+    const scores = calculateScores();
+    const tbody = document.getElementById('standings-tbody');
+    const breakdown = document.getElementById('standings-breakdown');
+
+    // Determine positions
+    const martinTotal = scores.martin.total;
+    const audreyTotal = scores.audrey.total;
+    let martinPos, audreyPos;
+    if (martinTotal > audreyTotal) { martinPos = 'P1'; audreyPos = 'P2'; }
+    else if (audreyTotal > martinTotal) { martinPos = 'P2'; audreyPos = 'P1'; }
+    else { martinPos = 'P1'; audreyPos = 'P1'; }
+
+    // Sort rows by points
+    const rows = [
+        { pos: martinPos, name: 'Martin Grasser', pts: martinTotal },
+        { pos: audreyPos, name: 'Audrey Chen', pts: audreyTotal }
+    ].sort((a, b) => b.pts - a.pts);
+
+    tbody.innerHTML = rows.map((r, i) => {
+        return '<tr><td>' + r.pos + '</td><td>' + r.name + '</td><td>' + r.pts + '</td></tr>';
+    }).join('');
+
+    // Race-by-race breakdown
+    const scoredRaces = Object.keys(RESULTS.races);
+    if (scoredRaces.length === 0) {
+        breakdown.innerHTML = '';
+        return;
+    }
+
+    let html = '<h3>Race-by-Race Scoring</h3>';
+    html += '<div class="race-score-row header"><span>Race</span><span class="score-cell">Martin</span><span class="score-cell">Audrey</span></div>';
+
+    scoredRaces.forEach(raceId => {
+        const race = RACES.find(r => r.id === raceId);
+        const mScore = scores.martin['race' + raceId];
+        const aScore = scores.audrey['race' + raceId];
+        const mLeading = mScore.pts > aScore.pts ? ' leading' : '';
+        const aLeading = aScore.pts > mScore.pts ? ' leading' : '';
+        html += '<div class="race-score-row">';
+        html += '<span>' + raceId + ' ' + (race ? race.city : '') + '</span>';
+        html += '<span class="score-cell' + mLeading + '">' + mScore.pts + ' pts</span>';
+        html += '<span class="score-cell' + aLeading + '">' + aScore.pts + ' pts</span>';
+        html += '</div>';
+    });
+
+    // Leader callout
+    if (martinTotal > audreyTotal) {
+        html += '<div class="standings-leader">Martin leads by ' + (martinTotal - audreyTotal) + ' point' + (martinTotal - audreyTotal !== 1 ? 's' : '') + '</div>';
+    } else if (audreyTotal > martinTotal) {
+        html += '<div class="standings-leader">Audrey leads by ' + (audreyTotal - martinTotal) + ' point' + (audreyTotal - martinTotal !== 1 ? 's' : '') + '</div>';
+    } else {
+        html += '<div class="standings-leader">Tied at ' + martinTotal + ' points</div>';
+    }
+
+    breakdown.innerHTML = html;
+}
 
 // ———— Boot ————
 document.addEventListener('DOMContentLoaded', () => {
