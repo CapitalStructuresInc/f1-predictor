@@ -320,6 +320,25 @@
             flex-wrap: wrap;
         }
         .race-entry .podium-form .form-group { margin-bottom: 0; }
+        .race-entry .sprint-form {
+            border-left: 2px solid #ddd;
+            margin-left: 12px;
+            padding-left: 16px;
+            margin-top: 4px;
+            padding-top: 8px;
+            padding-bottom: 16px;
+        }
+        .sprint-label {
+            font-size: 10px;
+            font-weight: bold;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #888;
+            margin-bottom: 8px;
+        }
+        .sprint-row {
+            background: #fafafa;
+        }
 
         /* —— Comparison grid —— */
         .comparison-grid {
@@ -649,6 +668,7 @@
             .comparison-grid li { grid-template-columns: 1fr; gap: 4px; }
             .comparison-grid .col-pick { padding-left: 0; border-left: none; }
             .race-entry .podium-form { padding-left: 0; flex-direction: column; gap: 16px; }
+            .race-entry .sprint-form { margin-left: 0; padding-left: 12px; }
         }
         @media (max-width: 480px) {
             .hero p { font-size: 22px; }
@@ -893,6 +913,7 @@
         <span><strong>Constructors</strong>Up to 55 pts</span>
         <span><strong>Season Calls</strong>10 pts each</span>
         <span><strong>Race Podiums</strong>3/2/1 per race</span>
+        <span><strong>Sprint Podiums</strong>3/2/1 &times; 6 sprints</span>
     </div>
 
     <h3>Points Breakdown</h3>
@@ -902,7 +923,8 @@
         <li><span class="col-label">Constructor Ranking (11 teams)</span><span class="col-pick">0&ndash;5 pts each</span><span class="col-pick">55 pts</span></li>
         <li><span class="col-label">Season Calls (10 questions)</span><span class="col-pick">10 pts</span><span class="col-pick">100 pts</span></li>
         <li><span class="col-label">Race Podiums (24 races)</span><span class="col-pick">Up to 6 pts</span><span class="col-pick">144 pts</span></li>
-        <li style="font-weight:bold;"><span class="col-label">Total</span><span class="col-pick"></span><span class="col-pick">424 pts</span></li>
+        <li><span class="col-label">Sprint Podiums (6 sprints)</span><span class="col-pick">Up to 6 pts</span><span class="col-pick">36 pts</span></li>
+        <li style="font-weight:bold;"><span class="col-label">Total</span><span class="col-pick"></span><span class="col-pick">460 pts</span></li>
     </ul>
 
     <h3>Constructor Ranking Scoring</h3>
@@ -910,6 +932,9 @@
 
     <h3>Race Podium Scoring</h3>
     <p>Correct P1 = 3 pts. Correct P2 = 2 pts. Correct P3 = 1 pt. If you pick a driver who finishes on the podium but in the wrong position, +1 bonus pt.</p>
+
+    <h3>Sprint Podium Scoring</h3>
+    <p>Same scoring as race podiums. 6 sprint races (Shanghai, Miami, Montreal, Silverstone, Zandvoort, Marina Bay) each have a separate sprint podium prediction worth up to 6 pts.</p>
 
     <h3>Over/Under Scoring</h3>
     <p>For numerical picks (Different Winners, Backmarker Best): closest to the actual number wins the full points. If equidistant, earlier submission wins.</p>
@@ -959,23 +984,23 @@ const CONSTRUCTORS = [
 
 const RACES = [
     { id: '01', name: 'Australian Grand Prix', city: 'Melbourne', date: 'Mar 6\u20138' },
-    { id: '02', name: 'Chinese Grand Prix', city: 'Shanghai', date: 'Mar 13\u201315' },
+    { id: '02', name: 'Chinese Grand Prix', city: 'Shanghai', date: 'Mar 13\u201315', sprint: true },
     { id: '03', name: 'Japanese Grand Prix', city: 'Suzuka', date: 'Mar 27\u201329' },
     { id: '04', name: 'Bahrain Grand Prix', city: 'Sakhir', date: 'Apr 10\u201312' },
     { id: '05', name: 'Saudi Arabian Grand Prix', city: 'Jeddah', date: 'Apr 17\u201319' },
-    { id: '06', name: 'Miami Grand Prix', city: 'Miami', date: 'May 1\u20133' },
-    { id: '07', name: 'Canadian Grand Prix', city: 'Montreal', date: 'May 22\u201324' },
+    { id: '06', name: 'Miami Grand Prix', city: 'Miami', date: 'May 1\u20133', sprint: true },
+    { id: '07', name: 'Canadian Grand Prix', city: 'Montreal', date: 'May 22\u201324', sprint: true },
     { id: '08', name: 'Monaco Grand Prix', city: 'Monte Carlo', date: 'Jun 5\u20137' },
     { id: '09', name: 'Barcelona Grand Prix', city: 'Barcelona', date: 'Jun 12\u201314' },
     { id: '10', name: 'Austrian Grand Prix', city: 'Spielberg', date: 'Jun 26\u201328' },
-    { id: '11', name: 'British Grand Prix', city: 'Silverstone', date: 'Jul 3\u20135' },
+    { id: '11', name: 'British Grand Prix', city: 'Silverstone', date: 'Jul 3\u20135', sprint: true },
     { id: '12', name: 'Belgian Grand Prix', city: 'Spa', date: 'Jul 17\u201319' },
     { id: '13', name: 'Hungarian Grand Prix', city: 'Budapest', date: 'Jul 24\u201326' },
-    { id: '14', name: 'Dutch Grand Prix', city: 'Zandvoort', date: 'Aug 21\u201323' },
+    { id: '14', name: 'Dutch Grand Prix', city: 'Zandvoort', date: 'Aug 21\u201323', sprint: true },
     { id: '15', name: 'Italian Grand Prix', city: 'Monza', date: 'Sep 4\u20136' },
     { id: '16', name: 'Spanish Grand Prix', city: 'Madrid', date: 'Sep 11\u201313' },
     { id: '17', name: 'Azerbaijan Grand Prix', city: 'Baku', date: 'Sep 24\u201326' },
-    { id: '18', name: 'Singapore Grand Prix', city: 'Marina Bay', date: 'Oct 9\u201311' },
+    { id: '18', name: 'Singapore Grand Prix', city: 'Marina Bay', date: 'Oct 9\u201311', sprint: true },
     { id: '19', name: 'United States Grand Prix', city: 'Austin', date: 'Oct 23\u201325' },
     { id: '20', name: 'Mexico City Grand Prix', city: 'Mexico City', date: 'Oct 30\u2013Nov 1' },
     { id: '21', name: 'Brazilian Grand Prix', city: 'Interlagos', date: 'Nov 6\u20138' },
@@ -987,6 +1012,9 @@ const RACES = [
 const RESULTS = {
     races: {
         '01': { p1: 'George Russell', p2: 'Andrea Kimi Antonelli', p3: 'Charles Leclerc' }
+    },
+    sprints: {
+        // '02': { p1: '...', p2: '...', p3: '...' }  // added after sprint race
     },
     // Season-long results will be added as season progresses
     seasonCalls: {},
@@ -1046,13 +1074,23 @@ function buildRacePodiums() {
     RACES.forEach(race => {
         const detail = document.createElement('details');
         detail.className = 'race-entry';
-        detail.innerHTML =
-            '<summary><span>' + race.id + ' &mdash; ' + race.name + '</span><span class="meta" id="podium-status-' + race.id + '">' + race.city + '</span></summary>' +
+        let formHtml =
+            '<summary><span>' + race.id + ' &mdash; ' + race.name + (race.sprint ? ' \u2605' : '') + '</span><span class="meta" id="podium-status-' + race.id + '">' + race.city + '</span></summary>' +
             '<div class="podium-form">' +
                 '<div class="form-group"><label>P1 &mdash; Winner</label><select data-podium="' + race.id + '-p1"></select></div>' +
                 '<div class="form-group"><label>P2</label><select data-podium="' + race.id + '-p2"></select></div>' +
                 '<div class="form-group"><label>P3</label><select data-podium="' + race.id + '-p3"></select></div>' +
             '</div>';
+        if (race.sprint) {
+            formHtml +=
+                '<div class="podium-form sprint-form">' +
+                    '<div class="sprint-label">SPRINT</div>' +
+                    '<div class="form-group"><label>P1 &mdash; Winner</label><select data-podium="' + race.id + '-sp1"></select></div>' +
+                    '<div class="form-group"><label>P2</label><select data-podium="' + race.id + '-sp2"></select></div>' +
+                    '<div class="form-group"><label>P3</label><select data-podium="' + race.id + '-sp3"></select></div>' +
+                '</div>';
+        }
+        detail.innerHTML = formHtml;
         grid.appendChild(detail);
 
         detail.querySelectorAll('select').forEach(sel => {
@@ -1260,31 +1298,29 @@ function renderComparison() {
         const mPicks = [martin.podiums[race.id + '-p1'], martin.podiums[race.id + '-p2'], martin.podiums[race.id + '-p3']];
         const aPicks = [audrey.podiums[race.id + '-p1'], audrey.podiums[race.id + '-p2'], audrey.podiums[race.id + '-p3']];
 
+        function formatPickWithResult(pickArr, actual, actualPodium) {
+            const posPoints = [3, 2, 1];
+            let parts = [];
+            let totalPts = 0;
+            for (let i = 0; i < 3; i++) {
+                const p = pickArr[i];
+                const lastName = p ? p.split(' ').pop() : '';
+                if (!p) { parts.push('--'); continue; }
+                if (p === actual[i]) {
+                    parts.push('<span class="pick-correct">' + lastName + '</span>');
+                    totalPts += posPoints[i];
+                } else if (actualPodium.includes(p)) {
+                    parts.push('<span class="pick-wrong-pos">' + lastName + '</span>');
+                    totalPts += 1;
+                } else {
+                    parts.push('<span class="pick-miss">' + lastName + '</span>');
+                }
+            }
+            return parts.join(', ') + '<span class="result-actual">' + totalPts + ' pts &mdash; Actual: ' + actual.map(d => d.split(' ').pop()).join(', ') + '</span>';
+        }
+
         if (result) {
             const actualPodium = [result.p1, result.p2, result.p3];
-            const positions = ['P1', 'P2', 'P3'];
-            const posPoints = [3, 2, 1];
-
-            function formatPickWithResult(pickArr, actual, actualPodium) {
-                let parts = [];
-                let totalPts = 0;
-                for (let i = 0; i < 3; i++) {
-                    const p = pickArr[i];
-                    const lastName = p ? p.split(' ').pop() : '';
-                    if (!p) { parts.push('--'); continue; }
-                    if (p === actual[i]) {
-                        parts.push('<span class="pick-correct">' + lastName + '</span>');
-                        totalPts += posPoints[i];
-                    } else if (actualPodium.includes(p)) {
-                        parts.push('<span class="pick-wrong-pos">' + lastName + '</span>');
-                        totalPts += 1;
-                    } else {
-                        parts.push('<span class="pick-miss">' + lastName + '</span>');
-                    }
-                }
-                return parts.join(', ') + '<span class="result-actual">' + totalPts + ' pts &mdash; Actual: ' + actual.map(d => d.split(' ').pop()).join(', ') + '</span>';
-            }
-
             const mStr = formatPickWithResult(mPicks, actualPodium, actualPodium);
             const aStr = formatPickWithResult(aPicks, actualPodium, actualPodium);
             html += '<li><span class="col-label">' + race.id + ' ' + race.city + '</span><span class="col-pick">' + mStr + '</span><span class="col-pick">' + aStr + '</span></li>';
@@ -1294,6 +1330,26 @@ function renderComparison() {
             const mStr = mFiltered.length ? mFiltered.map(d => d.split(' ').pop()).join(', ') : '';
             const aStr = aFiltered.length ? aFiltered.map(d => d.split(' ').pop()).join(', ') : '';
             html += '<li><span class="col-label">' + race.id + ' ' + race.city + '</span>' + pick(mStr) + pick(aStr) + '</li>';
+        }
+
+        // Sprint row for sprint races
+        if (race.sprint) {
+            const spResult = RESULTS.sprints[race.id];
+            const mSpPicks = [martin.podiums[race.id + '-sp1'], martin.podiums[race.id + '-sp2'], martin.podiums[race.id + '-sp3']];
+            const aSpPicks = [audrey.podiums[race.id + '-sp1'], audrey.podiums[race.id + '-sp2'], audrey.podiums[race.id + '-sp3']];
+
+            if (spResult) {
+                const spActual = [spResult.p1, spResult.p2, spResult.p3];
+                const mSpStr = formatPickWithResult(mSpPicks, spActual, spActual);
+                const aSpStr = formatPickWithResult(aSpPicks, spActual, spActual);
+                html += '<li class="sprint-row"><span class="col-label">&nbsp;&nbsp;\u2605 Sprint</span><span class="col-pick">' + mSpStr + '</span><span class="col-pick">' + aSpStr + '</span></li>';
+            } else {
+                const mSpFiltered = mSpPicks.filter(Boolean);
+                const aSpFiltered = aSpPicks.filter(Boolean);
+                const mSpStr = mSpFiltered.length ? mSpFiltered.map(d => d.split(' ').pop()).join(', ') : '';
+                const aSpStr = aSpFiltered.length ? aSpFiltered.map(d => d.split(' ').pop()).join(', ') : '';
+                html += '<li class="sprint-row"><span class="col-label">&nbsp;&nbsp;\u2605 Sprint</span>' + pick(mSpStr) + pick(aSpStr) + '</li>';
+            }
         }
     });
     html += '</ul>';
@@ -1393,7 +1449,18 @@ function updatePodiumStatuses() {
         const status = document.getElementById('podium-status-' + race.id);
         if (p1 && p2 && p3 && status) {
             if (p1.value && p2.value && p3.value) {
-                status.textContent = p1.value.split(' ').pop() + ', ' + p2.value.split(' ').pop() + ', ' + p3.value.split(' ').pop();
+                let txt = p1.value.split(' ').pop() + ', ' + p2.value.split(' ').pop() + ', ' + p3.value.split(' ').pop();
+                if (race.sprint) {
+                    const sp1 = document.querySelector('[data-podium="' + race.id + '-sp1"]');
+                    const sp2 = document.querySelector('[data-podium="' + race.id + '-sp2"]');
+                    const sp3 = document.querySelector('[data-podium="' + race.id + '-sp3"]');
+                    if (sp1 && sp2 && sp3 && sp1.value && sp2.value && sp3.value) {
+                        txt += ' | Sprint: ' + sp1.value.split(' ').pop() + ', ' + sp2.value.split(' ').pop() + ', ' + sp3.value.split(' ').pop();
+                    } else {
+                        txt += ' | Sprint: --';
+                    }
+                }
+                status.textContent = txt;
                 status.classList.add('filled');
             } else {
                 status.textContent = race.city;
@@ -1458,6 +1525,33 @@ function calculateScores() {
         });
     });
 
+    // Sprint scoring
+    Object.keys(RESULTS.sprints).forEach(raceId => {
+        const actual = RESULTS.sprints[raceId];
+        const actualPodium = [actual.p1, actual.p2, actual.p3];
+
+        ['martin', 'audrey'].forEach(player => {
+            const picks = allPicks[player] && allPicks[player].podiums ? allPicks[player].podiums : {};
+            const pickP1 = picks[raceId + '-sp1'] || '';
+            const pickP2 = picks[raceId + '-sp2'] || '';
+            const pickP3 = picks[raceId + '-sp3'] || '';
+            let pts = 0;
+            let detail = [];
+
+            if (pickP1 && pickP1 === actual.p1) { pts += 3; detail.push('SP1 exact +3'); }
+            else if (pickP1 && actualPodium.includes(pickP1)) { pts += 1; detail.push('SP1 on podium +1'); }
+
+            if (pickP2 && pickP2 === actual.p2) { pts += 2; detail.push('SP2 exact +2'); }
+            else if (pickP2 && actualPodium.includes(pickP2)) { pts += 1; detail.push('SP2 on podium +1'); }
+
+            if (pickP3 && pickP3 === actual.p3) { pts += 1; detail.push('SP3 exact +1'); }
+            else if (pickP3 && actualPodium.includes(pickP3)) { pts += 1; detail.push('SP3 on podium +1'); }
+
+            scores[player]['sprint' + raceId] = { pts: pts, detail: detail };
+            scores[player].total += pts;
+        });
+    });
+
     return scores;
 }
 
@@ -1498,12 +1592,22 @@ function renderStandings() {
         const race = RACES.find(r => r.id === raceId);
         const mScore = scores.martin['race' + raceId];
         const aScore = scores.audrey['race' + raceId];
-        const mLeading = mScore.pts > aScore.pts ? ' leading' : '';
-        const aLeading = aScore.pts > mScore.pts ? ' leading' : '';
+        const hasSprint = RESULTS.sprints[raceId];
+        const mSprint = hasSprint ? scores.martin['sprint' + raceId] : null;
+        const aSprint = hasSprint ? scores.audrey['sprint' + raceId] : null;
+        const mTotal = mScore.pts + (mSprint ? mSprint.pts : 0);
+        const aTotal = aScore.pts + (aSprint ? aSprint.pts : 0);
+        const mLeading = mTotal > aTotal ? ' leading' : '';
+        const aLeading = aTotal > mTotal ? ' leading' : '';
         html += '<div class="race-score-row">';
         html += '<span>' + raceId + ' ' + (race ? race.city : '') + '</span>';
-        html += '<span class="score-cell' + mLeading + '">' + mScore.pts + ' pts</span>';
-        html += '<span class="score-cell' + aLeading + '">' + aScore.pts + ' pts</span>';
+        if (hasSprint) {
+            html += '<span class="score-cell' + mLeading + '">' + mScore.pts + ' + ' + mSprint.pts + ' spr = ' + mTotal + ' pts</span>';
+            html += '<span class="score-cell' + aLeading + '">' + aScore.pts + ' + ' + aSprint.pts + ' spr = ' + aTotal + ' pts</span>';
+        } else {
+            html += '<span class="score-cell' + mLeading + '">' + mScore.pts + ' pts</span>';
+            html += '<span class="score-cell' + aLeading + '">' + aScore.pts + ' pts</span>';
+        }
         html += '</div>';
     });
 
